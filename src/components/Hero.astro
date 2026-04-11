@@ -1,0 +1,100 @@
+---
+import { createHighlighter } from 'shiki';
+import sapphireGrammar from '../shiki/sapphire.tmLanguage.json';
+
+const helloCode = `class Greeter {
+  attr name: String
+
+  def greet() {
+    "Hello, #{self.name}! Welcome to Sapphire."
+  }
+}
+
+g = Greeter.new(name: "world")
+print g.greet()
+
+# Blocks, iterators, type annotations — all built in
+[1, 2, 3].map { |n| n * n }.each { |n| print n }`;
+
+const hl = await createHighlighter({
+  themes: ['one-dark-pro'],
+  langs: [sapphireGrammar as any],
+});
+const highlighted = hl.codeToHtml(helloCode, { lang: 'sapphire', theme: 'one-dark-pro' });
+---
+
+<section class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 pb-16">
+  <!-- Background glow -->
+  <div
+    class="pointer-events-none absolute inset-0 flex items-center justify-center"
+    aria-hidden="true"
+  >
+    <div class="h-[600px] w-[600px] rounded-full bg-indigo-600/10 blur-3xl"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-6xl w-full">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Left: text -->
+      <div>
+        <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300">
+          <span class="h-1.5 w-1.5 rounded-full bg-indigo-400"></span>
+          v0.1.1 — Early preview
+        </div>
+
+        <h1 class="text-5xl font-bold tracking-tight text-white lg:text-6xl leading-tight mb-6">
+          Object-oriented.<br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">
+            Clean by design.
+          </span>
+        </h1>
+
+        <p class="text-lg text-slate-400 leading-relaxed mb-8 max-w-lg">
+          Sapphire is a Ruby-inspired programming language with gradual typing,
+          first-class blocks, and a clean object model. No magic. No sigils. Just
+          elegant code.
+        </p>
+
+        <div class="flex flex-wrap gap-3 mb-10">
+          <a
+            href="#install"
+            class="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 transition-colors"
+          >
+            Get started
+          </a>
+          <a
+            href="https://github.com/sapphire-project/sapphire"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-lg border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-semibold text-slate-300 hover:bg-white/10 hover:text-white transition-all"
+          >
+            View on GitHub
+          </a>
+        </div>
+
+        <!-- Install pill -->
+        <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-mono text-slate-300 w-fit">
+          <span class="text-slate-500 select-none">$</span>
+          <span>sapphire run hello.spr</span>
+        </div>
+      </div>
+
+      <!-- Right: code block -->
+      <div class="rounded-xl border border-white/10 bg-[#1a1b26] shadow-2xl shadow-black/50 overflow-hidden">
+        <div class="flex items-center gap-1.5 px-4 py-3 border-b border-white/5">
+          <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+          <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
+          <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
+          <span class="ml-3 text-xs text-slate-500 font-mono">hello.spr</span>
+        </div>
+        <div set:html={highlighted} class="text-sm" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-600">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+</section>

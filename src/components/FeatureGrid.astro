@@ -1,0 +1,63 @@
+---
+const features = [
+  {
+    title: 'Everything is an Object',
+    description:
+      'Primitives like Int, Bool, and String are objects with methods. Call .even?, .upcase, or .times directly on literals.',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>`,
+  },
+  {
+    title: 'Blocks & Iterators',
+    description:
+      'First-class blocks and yield make iteration expressive. Build your own higher-order functions naturally.',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h10M4 18h6"/></svg>`,
+  },
+  {
+    title: 'Gradual Typing',
+    description:
+      'Add type annotations where you want compile-time safety. Leave them off where you want flexibility. Enforced at runtime when present.',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
+  },
+  {
+    title: 'Dual Execution',
+    description:
+      'Run code via the tree-walk interpreter or compile to bytecode with the VM — same source, two execution models.',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l14 9-14 9V3z"/></svg>`,
+  },
+  {
+    title: 'Ruby-Inspired Syntax',
+    description:
+      'Clean, readable syntax with no sigils or metaprogramming surprises. Familiar to Ruby developers, approachable to everyone.',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`,
+  },
+  {
+    title: 'Interfaces as Mixins',
+    description:
+      'Interfaces compose behavior, not just types. Mix them into classes for clean, reusable functionality without multiple inheritance.',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>`,
+  },
+];
+---
+
+<section class="py-24 px-6 border-t border-white/5">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-12 text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">Built with intention</h2>
+      <p class="text-slate-400 max-w-xl mx-auto">
+        Every design decision in Sapphire has a reason. No magic, no surprises.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {features.map((f) => (
+        <div class="rounded-xl border border-white/8 bg-white/3 p-6 hover:border-indigo-500/30 hover:bg-indigo-500/5 transition-all group">
+          <div class="mb-4 inline-flex items-center justify-center rounded-lg border border-indigo-500/20 bg-indigo-500/10 p-2.5 text-indigo-400 group-hover:border-indigo-500/40 group-hover:bg-indigo-500/20 transition-all">
+            <Fragment set:html={f.icon} />
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">{f.title}</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">{f.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

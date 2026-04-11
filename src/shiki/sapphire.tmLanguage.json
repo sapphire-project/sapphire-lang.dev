@@ -1,0 +1,65 @@
+{
+  "name": "sapphire",
+  "scopeName": "source.sapphire",
+  "fileTypes": ["spr"],
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#string" },
+    { "include": "#keyword" },
+    { "include": "#constant" },
+    { "include": "#number" },
+    { "include": "#class-name" },
+    { "include": "#predicate-method" },
+    { "include": "#function-def" },
+    { "include": "#self" }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.number-sign.sapphire",
+      "match": "#.*$"
+    },
+    "string": {
+      "name": "string.quoted.double.sapphire",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "punctuation.section.embedded.sapphire",
+          "match": "#\\{[^}]*\\}"
+        },
+        {
+          "name": "constant.character.escape.sapphire",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "keyword": {
+      "name": "keyword.control.sapphire",
+      "match": "\\b(def|defp|class|if|elsif|else|while|for|in|return|raise|begin|rescue|else|end|yield|next|break|attr|super|do)\\b"
+    },
+    "constant": {
+      "name": "constant.language.sapphire",
+      "match": "\\b(nil|true|false|self)\\b"
+    },
+    "number": {
+      "name": "constant.numeric.sapphire",
+      "match": "\\b[0-9]+(\\.[0-9]+)?\\b"
+    },
+    "class-name": {
+      "name": "entity.name.type.sapphire",
+      "match": "\\b[A-Z][A-Za-z0-9_]*\\b"
+    },
+    "predicate-method": {
+      "name": "entity.name.function.sapphire",
+      "match": "[a-z_][a-zA-Z0-9_]*\\?"
+    },
+    "function-def": {
+      "name": "entity.name.function.sapphire",
+      "match": "(?<=def\\s)[a-z_][a-zA-Z0-9_?!]*"
+    },
+    "self": {
+      "name": "variable.language.sapphire",
+      "match": "\\bself\\b"
+    }
+  }
+}

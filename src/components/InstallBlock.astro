@@ -1,0 +1,80 @@
+---
+---
+
+<section id="install" class="py-24 px-6 border-t border-white/5">
+  <div class="mx-auto max-w-4xl">
+    <div class="rounded-2xl border border-white/10 bg-gradient-to-br from-indigo-950/50 to-[#0a0a0f] p-10">
+      <h2 class="text-3xl font-bold text-white mb-2">Get started</h2>
+      <p class="text-slate-400 mb-10">
+        Sapphire ships as a single binary. Download it and you're ready to go.
+      </p>
+
+      <ol class="space-y-8">
+        <li class="flex gap-5">
+          <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-sm font-bold">1</span>
+          <div class="pt-0.5">
+            <p class="text-white font-medium mb-3">Download the binary from GitHub Releases</p>
+            <a
+              href="https://github.com/sapphire-project/sapphire/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+              sapphire-project/sapphire/releases
+            </a>
+          </div>
+        </li>
+
+        <li class="flex gap-5">
+          <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-sm font-bold">2</span>
+          <div class="pt-0.5 w-full">
+            <p class="text-white font-medium mb-3">Make it executable and add it to your PATH</p>
+            <div class="rounded-lg border border-white/10 bg-[#1a1b26] px-4 py-3 font-mono text-sm text-slate-300 overflow-x-auto">
+              <span class="text-slate-500 select-none">$ </span>chmod +x sapphire &amp;&amp; mv sapphire /usr/local/bin/
+            </div>
+          </div>
+        </li>
+
+        <li class="flex gap-5">
+          <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-sm font-bold">3</span>
+          <div class="pt-0.5 w-full">
+            <p class="text-white font-medium mb-3">Write your first program</p>
+            <div class="rounded-lg border border-white/10 bg-[#1a1b26] px-4 py-3 font-mono text-sm text-slate-300 overflow-x-auto space-y-1">
+              <div><span class="text-slate-500 select-none">$ </span>echo 'print "Hello, Sapphire!"' &gt; hello.spr</div>
+              <div><span class="text-slate-500 select-none">$ </span>sapphire run hello.spr</div>
+              <div class="text-green-400">Hello, Sapphire!</div>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="mt-10 pt-8 border-t border-white/5 flex flex-wrap gap-4">
+        <a
+          href="https://github.com/sapphire-project/sapphire/blob/main/docs/tutorial.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-sm text-indigo-400 hover:text-indigo-300 transition-colors font-medium"
+        >
+          Read the tutorial
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a
+          href="https://github.com/sapphire-project/sapphire/tree/main/examples"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-sm text-indigo-400 hover:text-indigo-300 transition-colors font-medium"
+        >
+          Browse examples
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

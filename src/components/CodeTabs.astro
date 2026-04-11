@@ -1,0 +1,198 @@
+---
+import { createHighlighter } from 'shiki';
+import sapphireGrammar from '../shiki/sapphire.tmLanguage.json';
+
+const tabs = [
+  {
+    label: 'Classes',
+    code: `class Shape {
+  attr color = "red"
+
+  def area() { 0 }
+
+  def describe() {
+    "A #{self.color} shape"
+  }
+}
+
+class Rectangle < Shape {
+  attr width: Int
+  attr height: Int
+
+  def area() {
+    self.width * self.height
+  }
+
+  def describe() {
+    super.describe() + " (#{self.width}x#{self.height})"
+  }
+}
+
+r = Rectangle.new(width: 4, height: 5)
+print r.describe()   # A red shape (4x5)
+print r.area()       # 20
+print r.is_a?(Shape) # true`,
+  },
+  {
+    label: 'Blocks & Iterators',
+    code: `numbers = [3, 1, 4, 1, 5, 9, 2, 6]
+
+# Functional iteration with blocks
+doubled = numbers.map { |n| n * 2 }
+evens   = numbers.select { |n| n % 2 == 0 }
+total   = numbers.reduce(0) { |acc, n| acc + n }
+
+print "sum: #{total}"
+print "any > 8? #{numbers.any? { |n| n > 8 }}"
+print "all > 0? #{numbers.all? { |n| n > 0 }}"
+
+# yield lets you build your own iterators
+def repeat(n: Int) {
+  i = 0
+  while i < n {
+    yield(i)
+    i = i + 1
+  }
+}
+
+repeat(3) { |i| print "step #{i}" }`,
+  },
+  {
+    label: 'Type Annotations',
+    code: `# Annotations are optional — add them where you want safety
+
+def clamp(value: Int, min: Int, max: Int) -> Int {
+  if value < min      { min }
+  elsif value > max   { max }
+  else                { value }
+}
+
+print clamp(5, 1, 10)   # 5
+print clamp(-3, 1, 10)  # 1
+print clamp(99, 1, 10)  # 10
+
+def abs(n: Int) -> Int {
+  return -n if n < 0
+  n
+}
+
+def factorial(n: Int) -> Int {
+  return 1 if n <= 1
+  n * factorial(n - 1)
+}
+
+print factorial(6)  # 720`,
+  },
+  {
+    label: 'Error Handling',
+    code: `# raise / begin / rescue — clean and composable
+
+def parse_age(s: String) -> Int {
+  age = s.to_i
+  raise "age must be positive" if age <= 0
+  age
+}
+
+begin
+  print parse_age("25")  # 25
+  print parse_age("0")   # raises
+rescue e
+  print "bad input: #{e}"
+end
+
+# Inline rescue inside a function body
+def safe_divide(a: Int, b: Int) -> Int {
+  a / b
+rescue e
+  print "cannot divide by zero"
+  0
+}
+
+print safe_divide(10, 2)  # 5
+print safe_divide(10, 0)  # 0`,
+  },
+];
+
+const hl = await createHighlighter({
+  themes: ['one-dark-pro'],
+  langs: [sapphireGrammar as any],
+});
+const rendered = tabs.map((t) =>
+  hl.codeToHtml(t.code, { lang: 'sapphire', theme: 'one-dark-pro' })
+);
+---
+
+<section class="py-24 px-6">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-12 text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">See the language</h2>
+      <p class="text-slate-400 max-w-xl mx-auto">
+        Real examples from the standard library and documentation — no toy snippets.
+      </p>
+    </div>
+
+    <!-- Tab buttons -->
+    <div class="flex flex-wrap gap-2 mb-4" role="tablist" id="code-tabs">
+      {tabs.map((tab, i) => (
+        <button
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-controls={`panel-${i}`}
+          id={`tab-${i}`}
+          data-tab={i}
+          class:list={[
+            'rounded-md px-4 py-2 text-sm font-medium transition-all',
+            i === 0
+              ? 'bg-indigo-600 text-white'
+              : 'border border-white/10 bg-white/5 text-slate-400 hover:text-white hover:bg-white/10',
+          ]}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- Code panels -->
+    <div class="rounded-xl border border-white/10 bg-[#1a1b26] shadow-2xl shadow-black/50 overflow-hidden">
+      <div class="flex items-center gap-1.5 px-4 py-3 border-b border-white/5">
+        <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+        <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
+        <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
+      </div>
+      {rendered.map((html, i) => (
+        <div
+          id={`panel-${i}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${i}`}
+          class:list={['overflow-x-auto', i !== 0 && 'hidden']}
+          set:html={html}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabList = document.getElementById('code-tabs')!;
+
+  tabList.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('button[data-tab]') as HTMLButtonElement | null;
+    if (!btn) return;
+
+    const idx = Number(btn.dataset.tab);
+
+    // Update buttons
+    tabList.querySelectorAll('button').forEach((b, i) => {
+      const active = i === idx;
+      b.setAttribute('aria-selected', String(active));
+      b.className = active
+        ? 'rounded-md px-4 py-2 text-sm font-medium transition-all bg-indigo-600 text-white'
+        : 'rounded-md px-4 py-2 text-sm font-medium transition-all border border-white/10 bg-white/5 text-slate-400 hover:text-white hover:bg-white/10';
+    });
+
+    // Update panels
+    document.querySelectorAll('[role="tabpanel"]').forEach((panel, i) => {
+      (panel as HTMLElement).classList.toggle('hidden', i !== idx);
+    });
+  });
+</script>
