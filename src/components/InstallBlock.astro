@@ -6,34 +6,27 @@
     <div class="rounded-2xl border border-white/10 bg-gradient-to-br from-indigo-950/50 to-[#0a0a0f] p-10">
       <h2 class="text-3xl font-bold text-white mb-2">Get started</h2>
       <p class="text-slate-400 mb-10">
-        Sapphire ships as a single binary. Download it and you're ready to go.
+        Use <span class="text-white font-medium">facet</span> — the official Sapphire toolchain manager — to install Sapphire and create projects.
       </p>
 
       <ol class="space-y-8">
         <li class="flex gap-5">
           <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-sm font-bold">1</span>
-          <div class="pt-0.5">
-            <p class="text-white font-medium mb-3">Download the binary from GitHub Releases</p>
-            <a
-              href="https://github.com/sapphire-project/sapphire/releases"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-              </svg>
-              sapphire-project/sapphire/releases
-            </a>
+          <div class="pt-0.5 w-full">
+            <p class="text-white font-medium mb-3">Install facet</p>
+            <div class="rounded-lg border border-white/10 bg-[#1a1b26] px-4 py-3 font-mono text-sm text-slate-300 overflow-x-auto">
+              <span class="text-slate-500 select-none">$ </span>cargo install --git https://github.com/sapphire-project/facet
+            </div>
+            <p class="mt-2 text-xs text-slate-500">Or grab a pre-built binary from the <a href="https://github.com/sapphire-project/facet/releases" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300">facet releases page</a>.</p>
           </div>
         </li>
 
         <li class="flex gap-5">
           <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-sm font-bold">2</span>
           <div class="pt-0.5 w-full">
-            <p class="text-white font-medium mb-3">Make it executable and add it to your PATH</p>
+            <p class="text-white font-medium mb-3">Install the Sapphire toolchain</p>
             <div class="rounded-lg border border-white/10 bg-[#1a1b26] px-4 py-3 font-mono text-sm text-slate-300 overflow-x-auto">
-              <span class="text-slate-500 select-none">$ </span>chmod +x sapphire &amp;&amp; mv sapphire /usr/local/bin/
+              <span class="text-slate-500 select-none">$ </span>facet sapphire install latest
             </div>
           </div>
         </li>
@@ -41,10 +34,10 @@
         <li class="flex gap-5">
           <span class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-sm font-bold">3</span>
           <div class="pt-0.5 w-full">
-            <p class="text-white font-medium mb-3">Write your first program</p>
+            <p class="text-white font-medium mb-3">Create and run your first project</p>
             <div class="rounded-lg border border-white/10 bg-[#1a1b26] px-4 py-3 font-mono text-sm text-slate-300 overflow-x-auto space-y-1">
-              <div><span class="text-slate-500 select-none">$ </span>echo 'print "Hello, Sapphire!"' &gt; hello.spr</div>
-              <div><span class="text-slate-500 select-none">$ </span>sapphire run hello.spr</div>
+              <div><span class="text-slate-500 select-none">$ </span>facet new myproject &amp;&amp; cd myproject</div>
+              <div><span class="text-slate-500 select-none">$ </span>facet run</div>
               <div class="text-green-400">Hello, Sapphire!</div>
             </div>
           </div>
