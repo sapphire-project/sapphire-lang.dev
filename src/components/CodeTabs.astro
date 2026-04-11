@@ -62,9 +62,13 @@ repeat(3) { |i| print "step #{i}" }`,
     code: `# Annotations are optional — add them where you want safety
 
 def clamp(value: Int, min: Int, max: Int) -> Int {
-  if value < min      { min }
-  elsif value > max   { max }
-  else                { value }
+  if value < min {
+    min
+  } elsif value > max {
+    max
+  } else {
+    value
+  }
 }
 
 print clamp(5, 1, 10)   # 5

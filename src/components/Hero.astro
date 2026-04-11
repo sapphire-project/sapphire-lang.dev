@@ -14,7 +14,8 @@ g = Greeter.new(name: "world")
 print g.greet()
 
 # Blocks, iterators, type annotations — all built in
-[1, 2, 3].map { |n| n * n }.each { |n| print n }`;
+squares = [1, 2, 3].map { |n| n * n }
+squares.each { |n| print n }`;
 
 const hl = await createHighlighter({
   themes: ['one-dark-pro'],
