@@ -20,30 +20,18 @@ squares.each { |n| print n }`;
 
 <Base title="Try Sapphire — Browser Playground" description="Try the Sapphire programming language in your browser with a live WASM-powered playground.">
   <Nav />
-  <main class="flex flex-col min-h-screen pt-16">
-    <!-- Toolbar -->
-    <div class="border-b border-white/5 bg-[#0d0d14] px-4 py-2 flex items-center gap-3">
-      <!-- Mobile tabs -->
-      <div class="flex sm:hidden rounded-md border border-white/10 overflow-hidden text-xs font-medium">
-        <button id="tab-code" class="px-3 py-1.5 bg-indigo-600 text-white transition-colors">Code</button>
-        <button id="tab-output" class="px-3 py-1.5 text-slate-400 hover:text-white transition-colors">Output</button>
-      </div>
-      <!-- Desktop label -->
-      <div class="hidden sm:flex items-center gap-2 text-slate-400 text-sm">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <polygon points="12,2 22,8 22,16 12,22 2,16 2,8" fill="#6366f1" opacity="0.9"/>
-          <polygon points="12,5 19,9 19,15 12,19 5,15 5,9" fill="#4338ca" opacity="0.7"/>
-          <polygon points="12,8 16,10.5 16,13.5 12,16 8,13.5 8,10.5" fill="#818cf8" opacity="0.9"/>
-        </svg>
-        <span class="font-medium text-slate-300">Playground</span>
-      </div>
-      <div class="hidden sm:block h-4 w-px bg-white/10"></div>
-      <span id="wasm-status" class="text-xs text-slate-500">Loading runtime…</span>
-      <div class="ml-auto flex items-center gap-3">
+  <main class="min-h-screen pt-24 pb-16 px-6">
+    <div class="mx-auto max-w-4xl">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-white">Playground</h1>
+          <p class="text-sm text-slate-500 mt-1">Try Sapphire in your browser — <span id="wasm-status">loading runtime…</span></p>
+        </div>
         <button
           id="run-btn"
           disabled
-          class="flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-1.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          class="flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
         >
           <svg id="run-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M5 3l14 9-14 9V3z"/>
@@ -54,35 +42,35 @@ squares.each { |n| print n }`;
           Run
         </button>
       </div>
-    </div>
 
-    <div class="flex flex-1 overflow-hidden" style="height: calc(100vh - 8rem);">
-      <!-- Editor pane: full width on mobile, flex-1 on desktop -->
-      <div id="pane-code" class="flex flex-col w-full sm:w-auto sm:flex-1 sm:border-r border-white/5 min-w-0">
-        <div class="hidden sm:flex items-center gap-1.5 px-4 py-2 border-b border-white/5 bg-[#0d0d14]">
-          <span class="h-2.5 w-2.5 rounded-full bg-red-500/60"></span>
-          <span class="h-2.5 w-2.5 rounded-full bg-yellow-500/60"></span>
-          <span class="h-2.5 w-2.5 rounded-full bg-green-500/60"></span>
+      <!-- Editor -->
+      <div class="rounded-xl border border-white/10 overflow-hidden shadow-2xl shadow-black/50 mb-4">
+        <div class="flex items-center gap-1.5 px-4 py-3 border-b border-white/5 bg-[#0d0d14]">
+          <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+          <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
+          <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
           <span class="ml-3 text-xs text-slate-500 font-mono">main.spr</span>
+          <span class="ml-auto text-xs text-slate-600">⌘↵ to run</span>
         </div>
         <textarea
           id="editor"
           spellcheck="false"
           autocorrect="off"
           autocapitalize="off"
-          class="flex-1 resize-none bg-[#0f0f17] px-6 py-5 font-mono text-sm text-slate-200 outline-none leading-relaxed caret-indigo-400 placeholder-slate-600"
+          rows="16"
+          class="w-full resize-none bg-[#0f0f17] px-6 py-5 font-mono text-sm text-slate-200 outline-none leading-relaxed caret-indigo-400 placeholder-slate-600 block"
           placeholder="Write some Sapphire code…"
           set:text={defaultCode}
         />
       </div>
 
-      <!-- Output pane: full width on mobile (hidden when code tab active), fixed width on desktop -->
-      <div id="pane-output" class="hidden sm:flex flex-col sm:w-96 shrink-0 bg-[#0a0a0f] w-full">
-        <div class="flex items-center justify-between px-4 py-2 border-b border-white/5 bg-[#0d0d14]">
+      <!-- Output -->
+      <div class="rounded-xl border border-white/10 overflow-hidden shadow-xl shadow-black/40">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-[#0d0d14]">
           <span class="text-xs font-medium text-slate-400">Output</span>
           <button id="clear-btn" class="text-xs text-slate-600 hover:text-slate-400 transition-colors">Clear</button>
         </div>
-        <div id="output" class="flex-1 overflow-auto px-5 py-4 font-mono text-sm leading-relaxed">
+        <div id="output" class="min-h-32 px-5 py-4 font-mono text-sm leading-relaxed bg-[#0a0a0f]">
           <span class="text-slate-600 text-xs">Press Run to execute your code.</span>
         </div>
       </div>
@@ -97,27 +85,6 @@ squares.each { |n| print n }`;
     const wasmStatus = document.getElementById('wasm-status') as HTMLSpanElement;
     const runIcon = document.getElementById('run-icon') as SVGElement;
     const runSpinner = document.getElementById('run-spinner') as SVGElement;
-    const tabCode = document.getElementById('tab-code') as HTMLButtonElement;
-    const tabOutput = document.getElementById('tab-output') as HTMLButtonElement;
-    const paneCode = document.getElementById('pane-code') as HTMLDivElement;
-    const paneOutput = document.getElementById('pane-output') as HTMLDivElement;
-
-    function showTab(tab: 'code' | 'output') {
-      const isCode = tab === 'code';
-      paneCode.classList.toggle('hidden', !isCode);
-      paneOutput.classList.toggle('hidden', isCode);
-      paneOutput.classList.toggle('flex', !isCode);
-      tabCode.classList.toggle('bg-indigo-600', isCode);
-      tabCode.classList.toggle('text-white', isCode);
-      tabCode.classList.toggle('text-slate-400', !isCode);
-      tabOutput.classList.toggle('bg-indigo-600', !isCode);
-      tabOutput.classList.toggle('text-white', !isCode);
-      tabOutput.classList.toggle('text-slate-400', isCode);
-    }
-
-    tabCode.addEventListener('click', () => showTab('code'));
-    tabOutput.addEventListener('click', () => showTab('output'));
-
     let runSapphire: ((src: string) => { output(): string; error(): string | undefined; is_ok(): boolean }) | null = null;
 
     async function initWasm() {
@@ -125,12 +92,12 @@ squares.each { |n| print n }`;
         const mod = await import('../lib/sapphire.js');
         await mod.default({ module_or_path: '/wasm/sapphire_bg.wasm' });
         runSapphire = mod.run_sapphire;
-        wasmStatus.textContent = 'Ready';
-        wasmStatus.classList.add('text-green-500/70');
+        wasmStatus.textContent = 'ready';
+        wasmStatus.classList.add('text-green-400/80');
         wasmStatus.classList.remove('text-slate-500');
         runBtn.disabled = false;
       } catch (e) {
-        wasmStatus.textContent = 'Failed to load runtime';
+        wasmStatus.textContent = 'failed to load runtime';
         wasmStatus.classList.add('text-red-400');
         console.error(e);
       }
@@ -170,7 +137,7 @@ squares.each { |n| print n }`;
         } else {
           renderOutput(result.error() ?? 'Unknown error', true);
         }
-        if (window.innerWidth < 640) showTab('output');
+
       } catch (e) {
         renderOutput(String(e), true);
       } finally {
