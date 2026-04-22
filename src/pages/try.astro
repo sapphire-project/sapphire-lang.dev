@@ -1,0 +1,168 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const defaultCode = `class Greeter {
+  attr name: String
+
+  def greet() -> String {
+    "Hello, \#{self.name}! Welcome to Sapphire."
+  }
+}
+
+g = Greeter.new(name: "world")
+print g.greet()
+
+squares = [1, 2, 3].map { |n| n * n }
+squares.each { |n| print n }`;
+---
+
+<Base title="Try Sapphire — Browser Playground" description="Try the Sapphire programming language in your browser with a live WASM-powered playground.">
+  <Nav />
+  <main class="min-h-screen pt-24 pb-16 px-6">
+    <div class="mx-auto max-w-4xl">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-white">Playground</h1>
+          <p class="text-sm text-slate-500 mt-1">Try Sapphire in your browser — <span id="wasm-status">loading runtime…</span></p>
+        </div>
+        <button
+          id="run-btn"
+          disabled
+          class="flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+        >
+          <svg id="run-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M5 3l14 9-14 9V3z"/>
+          </svg>
+          <svg id="run-spinner" class="hidden animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          Run
+        </button>
+      </div>
+
+      <!-- Editor -->
+      <div class="rounded-xl border border-white/10 overflow-hidden shadow-2xl shadow-black/50 mb-4">
+        <div class="flex items-center gap-1.5 px-4 py-3 border-b border-white/5 bg-[#0d0d14]">
+          <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+          <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
+          <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
+          <span class="ml-3 text-xs text-slate-500 font-mono">main.spr</span>
+          <span class="ml-auto text-xs text-slate-600">⌘↵ to run</span>
+        </div>
+        <textarea
+          id="editor"
+          spellcheck="false"
+          autocorrect="off"
+          autocapitalize="off"
+          rows="16"
+          class="w-full resize-none bg-[#0f0f17] px-6 py-5 font-mono text-sm text-slate-200 outline-none leading-relaxed caret-indigo-400 placeholder-slate-600 block"
+          placeholder="Write some Sapphire code…"
+          set:text={defaultCode}
+        />
+      </div>
+
+      <!-- Output -->
+      <div class="rounded-xl border border-white/10 overflow-hidden shadow-xl shadow-black/40">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-[#0d0d14]">
+          <span class="text-xs font-medium text-slate-400">Output</span>
+          <button id="clear-btn" class="text-xs text-slate-600 hover:text-slate-400 transition-colors">Clear</button>
+        </div>
+        <div id="output" class="min-h-32 px-5 py-4 font-mono text-sm leading-relaxed bg-[#0a0a0f]">
+          <span class="text-slate-600 text-xs">Press Run to execute your code.</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const editor = document.getElementById('editor') as HTMLTextAreaElement;
+    const runBtn = document.getElementById('run-btn') as HTMLButtonElement;
+    const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+    const output = document.getElementById('output') as HTMLDivElement;
+    const wasmStatus = document.getElementById('wasm-status') as HTMLSpanElement;
+    const runIcon = document.getElementById('run-icon') as SVGElement;
+    const runSpinner = document.getElementById('run-spinner') as SVGElement;
+    let runSapphire: ((src: string) => { output(): string; error(): string | undefined; is_ok(): boolean }) | null = null;
+
+    async function initWasm() {
+      try {
+        const mod = await import('../lib/sapphire.js');
+        await mod.default({ module_or_path: '/wasm/sapphire_bg.wasm' });
+        runSapphire = mod.run_sapphire;
+        wasmStatus.textContent = 'ready';
+        wasmStatus.classList.add('text-green-400/80');
+        wasmStatus.classList.remove('text-slate-500');
+        runBtn.disabled = false;
+      } catch (e) {
+        wasmStatus.textContent = 'failed to load runtime';
+        wasmStatus.classList.add('text-red-400');
+        console.error(e);
+      }
+    }
+
+    function setRunning(running: boolean) {
+      runBtn.disabled = running;
+      runIcon.classList.toggle('hidden', running);
+      runSpinner.classList.toggle('hidden', !running);
+    }
+
+    function renderOutput(text: string, isError: boolean) {
+      output.innerHTML = '';
+      if (!text) {
+        const empty = document.createElement('span');
+        empty.className = 'text-slate-600 text-xs';
+        empty.textContent = '(no output)';
+        output.appendChild(empty);
+        return;
+      }
+      const pre = document.createElement('pre');
+      pre.className = isError
+        ? 'text-red-400 whitespace-pre-wrap break-words'
+        : 'text-slate-200 whitespace-pre-wrap break-words';
+      pre.textContent = text;
+      output.appendChild(pre);
+    }
+
+    runBtn.addEventListener('click', async () => {
+      if (!runSapphire) return;
+      setRunning(true);
+      await new Promise(r => setTimeout(r, 0));
+      try {
+        const result = runSapphire(editor.value);
+        if (result.is_ok()) {
+          renderOutput(result.output(), false);
+        } else {
+          renderOutput(result.error() ?? 'Unknown error', true);
+        }
+
+      } catch (e) {
+        renderOutput(String(e), true);
+      } finally {
+        setRunning(false);
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      output.innerHTML = '<span class="text-slate-600 text-xs">Press Run to execute your code.</span>';
+    });
+
+    editor.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runBtn.click();
+      }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        editor.value = editor.value.slice(0, start) + '  ' + editor.value.slice(end);
+        editor.selectionStart = editor.selectionEnd = start + 2;
+      }
+    });
+
+    initWasm();
+  </script>
+</Base>

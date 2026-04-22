@@ -1,5 +1,9 @@
 # build output
 dist/
+
+# downloaded WASM runtime (fetched by scripts/download-wasm.js)
+src/lib/
+public/wasm/
 # generated types
 .astro/
 
