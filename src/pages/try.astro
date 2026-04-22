@@ -1,0 +1,201 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const defaultCode = `class Greeter {
+  attr name: String
+
+  def greet() -> String {
+    "Hello, \#{self.name}! Welcome to Sapphire."
+  }
+}
+
+g = Greeter.new(name: "world")
+print g.greet()
+
+squares = [1, 2, 3].map { |n| n * n }
+squares.each { |n| print n }`;
+---
+
+<Base title="Try Sapphire — Browser Playground" description="Try the Sapphire programming language in your browser with a live WASM-powered playground.">
+  <Nav />
+  <main class="flex flex-col min-h-screen pt-16">
+    <!-- Toolbar -->
+    <div class="border-b border-white/5 bg-[#0d0d14] px-4 py-2 flex items-center gap-3">
+      <!-- Mobile tabs -->
+      <div class="flex sm:hidden rounded-md border border-white/10 overflow-hidden text-xs font-medium">
+        <button id="tab-code" class="px-3 py-1.5 bg-indigo-600 text-white transition-colors">Code</button>
+        <button id="tab-output" class="px-3 py-1.5 text-slate-400 hover:text-white transition-colors">Output</button>
+      </div>
+      <!-- Desktop label -->
+      <div class="hidden sm:flex items-center gap-2 text-slate-400 text-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <polygon points="12,2 22,8 22,16 12,22 2,16 2,8" fill="#6366f1" opacity="0.9"/>
+          <polygon points="12,5 19,9 19,15 12,19 5,15 5,9" fill="#4338ca" opacity="0.7"/>
+          <polygon points="12,8 16,10.5 16,13.5 12,16 8,13.5 8,10.5" fill="#818cf8" opacity="0.9"/>
+        </svg>
+        <span class="font-medium text-slate-300">Playground</span>
+      </div>
+      <div class="hidden sm:block h-4 w-px bg-white/10"></div>
+      <span id="wasm-status" class="text-xs text-slate-500">Loading runtime…</span>
+      <div class="ml-auto flex items-center gap-3">
+        <button
+          id="run-btn"
+          disabled
+          class="flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-1.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+        >
+          <svg id="run-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M5 3l14 9-14 9V3z"/>
+          </svg>
+          <svg id="run-spinner" class="hidden animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          Run
+        </button>
+      </div>
+    </div>
+
+    <div class="flex flex-1 overflow-hidden" style="height: calc(100vh - 8rem);">
+      <!-- Editor pane: full width on mobile, flex-1 on desktop -->
+      <div id="pane-code" class="flex flex-col w-full sm:w-auto sm:flex-1 sm:border-r border-white/5 min-w-0">
+        <div class="hidden sm:flex items-center gap-1.5 px-4 py-2 border-b border-white/5 bg-[#0d0d14]">
+          <span class="h-2.5 w-2.5 rounded-full bg-red-500/60"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-yellow-500/60"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-green-500/60"></span>
+          <span class="ml-3 text-xs text-slate-500 font-mono">main.spr</span>
+        </div>
+        <textarea
+          id="editor"
+          spellcheck="false"
+          autocorrect="off"
+          autocapitalize="off"
+          class="flex-1 resize-none bg-[#0f0f17] px-6 py-5 font-mono text-sm text-slate-200 outline-none leading-relaxed caret-indigo-400 placeholder-slate-600"
+          placeholder="Write some Sapphire code…"
+          set:text={defaultCode}
+        />
+      </div>
+
+      <!-- Output pane: full width on mobile (hidden when code tab active), fixed width on desktop -->
+      <div id="pane-output" class="hidden sm:flex flex-col sm:w-96 shrink-0 bg-[#0a0a0f] w-full">
+        <div class="flex items-center justify-between px-4 py-2 border-b border-white/5 bg-[#0d0d14]">
+          <span class="text-xs font-medium text-slate-400">Output</span>
+          <button id="clear-btn" class="text-xs text-slate-600 hover:text-slate-400 transition-colors">Clear</button>
+        </div>
+        <div id="output" class="flex-1 overflow-auto px-5 py-4 font-mono text-sm leading-relaxed">
+          <span class="text-slate-600 text-xs">Press Run to execute your code.</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const editor = document.getElementById('editor') as HTMLTextAreaElement;
+    const runBtn = document.getElementById('run-btn') as HTMLButtonElement;
+    const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+    const output = document.getElementById('output') as HTMLDivElement;
+    const wasmStatus = document.getElementById('wasm-status') as HTMLSpanElement;
+    const runIcon = document.getElementById('run-icon') as SVGElement;
+    const runSpinner = document.getElementById('run-spinner') as SVGElement;
+    const tabCode = document.getElementById('tab-code') as HTMLButtonElement;
+    const tabOutput = document.getElementById('tab-output') as HTMLButtonElement;
+    const paneCode = document.getElementById('pane-code') as HTMLDivElement;
+    const paneOutput = document.getElementById('pane-output') as HTMLDivElement;
+
+    function showTab(tab: 'code' | 'output') {
+      const isCode = tab === 'code';
+      paneCode.classList.toggle('hidden', !isCode);
+      paneOutput.classList.toggle('hidden', isCode);
+      paneOutput.classList.toggle('flex', !isCode);
+      tabCode.classList.toggle('bg-indigo-600', isCode);
+      tabCode.classList.toggle('text-white', isCode);
+      tabCode.classList.toggle('text-slate-400', !isCode);
+      tabOutput.classList.toggle('bg-indigo-600', !isCode);
+      tabOutput.classList.toggle('text-white', !isCode);
+      tabOutput.classList.toggle('text-slate-400', isCode);
+    }
+
+    tabCode.addEventListener('click', () => showTab('code'));
+    tabOutput.addEventListener('click', () => showTab('output'));
+
+    let runSapphire: ((src: string) => { output(): string; error(): string | undefined; is_ok(): boolean }) | null = null;
+
+    async function initWasm() {
+      try {
+        const mod = await import('../lib/sapphire.js');
+        await mod.default({ module_or_path: '/wasm/sapphire_bg.wasm' });
+        runSapphire = mod.run_sapphire;
+        wasmStatus.textContent = 'Ready';
+        wasmStatus.classList.add('text-green-500/70');
+        wasmStatus.classList.remove('text-slate-500');
+        runBtn.disabled = false;
+      } catch (e) {
+        wasmStatus.textContent = 'Failed to load runtime';
+        wasmStatus.classList.add('text-red-400');
+        console.error(e);
+      }
+    }
+
+    function setRunning(running: boolean) {
+      runBtn.disabled = running;
+      runIcon.classList.toggle('hidden', running);
+      runSpinner.classList.toggle('hidden', !running);
+    }
+
+    function renderOutput(text: string, isError: boolean) {
+      output.innerHTML = '';
+      if (!text) {
+        const empty = document.createElement('span');
+        empty.className = 'text-slate-600 text-xs';
+        empty.textContent = '(no output)';
+        output.appendChild(empty);
+        return;
+      }
+      const pre = document.createElement('pre');
+      pre.className = isError
+        ? 'text-red-400 whitespace-pre-wrap break-words'
+        : 'text-slate-200 whitespace-pre-wrap break-words';
+      pre.textContent = text;
+      output.appendChild(pre);
+    }
+
+    runBtn.addEventListener('click', async () => {
+      if (!runSapphire) return;
+      setRunning(true);
+      await new Promise(r => setTimeout(r, 0));
+      try {
+        const result = runSapphire(editor.value);
+        if (result.is_ok()) {
+          renderOutput(result.output(), false);
+        } else {
+          renderOutput(result.error() ?? 'Unknown error', true);
+        }
+        if (window.innerWidth < 640) showTab('output');
+      } catch (e) {
+        renderOutput(String(e), true);
+      } finally {
+        setRunning(false);
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      output.innerHTML = '<span class="text-slate-600 text-xs">Press Run to execute your code.</span>';
+    });
+
+    editor.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runBtn.click();
+      }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        editor.value = editor.value.slice(0, start) + '  ' + editor.value.slice(end);
+        editor.selectionStart = editor.selectionEnd = start + 2;
+      }
+    });
+
+    initWasm();
+  </script>
+</Base>
