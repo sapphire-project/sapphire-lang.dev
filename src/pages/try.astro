@@ -78,6 +78,8 @@ squares.each { |n| print n }`;
   </main>
 
   <script>
+    import { getRunSapphire } from '../runtime/sapphire-wasm';
+
     const editor = document.getElementById('editor') as HTMLTextAreaElement;
     const runBtn = document.getElementById('run-btn') as HTMLButtonElement;
     const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
@@ -85,13 +87,11 @@ squares.each { |n| print n }`;
     const wasmStatus = document.getElementById('wasm-status') as HTMLSpanElement;
     const runIcon = document.getElementById('run-icon') as SVGElement;
     const runSpinner = document.getElementById('run-spinner') as SVGElement;
-    let runSapphire: ((src: string) => { output(): string; error(): string | undefined; is_ok(): boolean }) | null = null;
+    let runSapphire: Awaited<ReturnType<typeof getRunSapphire>> | null = null;
 
     async function initWasm() {
       try {
-        const mod = await import('../lib/sapphire.js');
-        await mod.default({ module_or_path: '/wasm/sapphire_bg.wasm' });
-        runSapphire = mod.run_sapphire;
+        runSapphire = await getRunSapphire();
         wasmStatus.textContent = 'ready';
         wasmStatus.classList.add('text-green-400/80');
         wasmStatus.classList.remove('text-slate-500');
