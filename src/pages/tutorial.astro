@@ -7,39 +7,30 @@ import RunnableSnippet from '../components/RunnableSnippet.astro';
 const snippetHello = `print "Hello from Sapphire!"
 who = "world"
 print "Hello, #{who}!"`;
+const snippetGreet = `def greet(who) {
+  "Hello, #{who}!"
+}
+
+print greet("world")`;
+const snippetGreeter = `class Greeter {
+  attr who = "world"
+
+  def greet() {
+    print "Hello, #{self.who}!"
+  }
+}
+
+g = Greeter.new()
+g.greet()`;
 const snippetValues = `n = 7
 pi = 3
 label = "answer"
 print "#{label}: #{n + pi}"`;
-const snippetMethods = `def double(x: Int) -> Int {
-  x * 2
-}
-
-print double(21)`;
-const snippetClass = `class Counter {
-  attr count = 0
-
-  def tick() {
-    self.count = self.count + 1
-  }
-}
-
-c = Counter.new()
-c.tick()
-c.tick()
-print "count is #{c.count}"`;
 const snippetBlocks = `nums = [1, 2, 3, 4]
 squares = nums.map { |n| n * n }
 sum = nums.reduce(0) { |acc, n| acc + n }
 print "squares: #{squares}"
 print "sum: #{sum}"`;
-const snippetTypes = `def clamp(value: Int, min: Int, max: Int) -> Int {
-  if value < min { min }
-  elsif value > max { max }
-  else { value }
-}
-
-print clamp(12, 0, 10)`;
 const snippetErrors = `def boom() {
   raise "something went wrong"
 }
@@ -77,9 +68,7 @@ r = Rectangle.new(width: 4, height: 5)
 print r.describe()   # A red shape (4x5)
 print r.area()       # 20
 print r.is_a?(Shape) # true`;
-const snippetTypesExtended = `# Annotations are optional — add them where you want safety
-
-def clamp(value: Int, min: Int, max: Int) -> Int {
+const snippetTypesExtended = `def clamp(value: Int, min: Int, max: Int) -> Int {
   if value < min {
     min
   } elsif value > max {
@@ -92,6 +81,8 @@ def clamp(value: Int, min: Int, max: Int) -> Int {
 print clamp(5, 1, 10)   # 5
 print clamp(-3, 1, 10)  # 1
 print clamp(99, 1, 10)  # 10
+
+# Annotations are optional — add them where you want safety
 
 def abs(n: Int) -> Int {
   return -n if n < 0
@@ -153,12 +144,12 @@ print safe_divide(10, 0)  # 0`;
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">On this page</p>
           <ul class="text-sm text-slate-400 space-y-1.5 columns-1 sm:columns-2 gap-x-6">
             <li><a href="#hello" class="hover:text-white">Hello</a></li>
+            <li><a href="#greet" class="hover:text-white">A greet method</a></li>
+            <li><a href="#greeter" class="hover:text-white">A Greeter class</a></li>
             <li><a href="#values" class="hover:text-white">Values</a></li>
-            <li><a href="#methods" class="hover:text-white">Methods</a></li>
-            <li><a href="#classes" class="hover:text-white">Classes</a></li>
             <li><a href="#inheritance" class="hover:text-white">Inheritance</a></li>
             <li><a href="#blocks" class="hover:text-white">Blocks</a></li>
-            <li><a href="#types" class="hover:text-white">Types</a></li>
+            <li><a href="#types" class="hover:text-white">Gradual typing</a></li>
             <li><a href="#errors" class="hover:text-white">Errors</a></li>
             <li><a href="#next" class="hover:text-white">Next steps</a></li>
           </ul>
@@ -174,30 +165,29 @@ print safe_divide(10, 0)  # 0`;
         <RunnableSnippet id="hello" code={snippetHello} filename="hello.spr" rows={6} />
       </section>
 
+      <section id="greet" class="scroll-mt-28 mb-16">
+        <h2 class="text-xl font-semibold text-white mb-3">A greet method</h2>
+        <p class="text-slate-400 leading-relaxed mb-4">
+          Next, wrap the greeting in a <code class="text-slate-300">def</code>. The last expression in the body is the return value.
+        </p>
+        <RunnableSnippet id="greet" code={snippetGreet} filename="greet.spr" rows={8} />
+      </section>
+
+      <section id="greeter" class="scroll-mt-28 mb-16">
+        <h2 class="text-xl font-semibold text-white mb-3">A Greeter class</h2>
+        <p class="text-slate-400 leading-relaxed mb-4">
+          <code class="text-slate-300">class</code> introduces a type. <code class="text-slate-300">attr</code> holds state;
+          <code class="text-slate-300">.new</code> builds an instance, and <code class="text-slate-300">self</code> is the receiver inside methods.
+        </p>
+        <RunnableSnippet id="greeter" code={snippetGreeter} filename="greeter.spr" rows={12} />
+      </section>
+
       <section id="values" class="scroll-mt-28 mb-16">
         <h2 class="text-xl font-semibold text-white mb-3">Values and variables</h2>
         <p class="text-slate-400 leading-relaxed mb-4">
           Assign with <code class="text-slate-300">=</code>. Types are often inferred; you can mix numbers and strings in messages.
         </p>
         <RunnableSnippet id="values" code={snippetValues} filename="values.spr" rows={6} />
-      </section>
-
-      <section id="methods" class="scroll-mt-28 mb-16">
-        <h2 class="text-xl font-semibold text-white mb-3">Methods</h2>
-        <p class="text-slate-400 leading-relaxed mb-4">
-          Define functions with <code class="text-slate-300">def</code>. The last expression is the return value unless you use
-          <code class="text-slate-300">return</code>. Annotations like <code class="text-slate-300">-&gt; Int</code> document intent and help the type checker.
-        </p>
-        <RunnableSnippet id="methods" code={snippetMethods} filename="methods.spr" rows={8} />
-      </section>
-
-      <section id="classes" class="scroll-mt-28 mb-16">
-        <h2 class="text-xl font-semibold text-white mb-3">Classes</h2>
-        <p class="text-slate-400 leading-relaxed mb-4">
-          <code class="text-slate-300">class</code> introduces a type. <code class="text-slate-300">attr</code> declares state;
-          <code class="text-slate-300">.new</code> constructs an instance. Inside methods, <code class="text-slate-300">self</code> is the receiver.
-        </p>
-        <RunnableSnippet id="classes" code={snippetClass} filename="counter.spr" rows={12} />
       </section>
 
       <section id="inheritance" class="scroll-mt-28 mb-16">
@@ -219,13 +209,15 @@ print safe_divide(10, 0)  # 0`;
       </section>
 
       <section id="types" class="scroll-mt-28 mb-16">
-        <h2 class="text-xl font-semibold text-white mb-3">Optional types</h2>
+        <h2 class="text-xl font-semibold text-white mb-3">Gradual typing</h2>
         <p class="text-slate-400 leading-relaxed mb-4">
-          You can annotate parameters and return types where it helps clarity. Omit them where inference is enough.
+          Sapphire is gradually typed: you can add <code class="text-slate-300">name: Type</code> and
+          <code class="text-slate-300">-&gt; Type</code> where they help, and lean on inference elsewhere. The type checker
+          enforces the annotations you choose; untyped code still runs. Below, <code class="text-slate-300">clamp</code> is fully
+          annotated, then <code class="text-slate-300">abs</code> and <code class="text-slate-300">factorial</code> show more patterns
+          (recursion, guards, early return).
         </p>
-        <RunnableSnippet id="types" code={snippetTypes} filename="types.spr" rows={10} />
-        <p class="text-slate-400 leading-relaxed mt-6 mb-4">More patterns: recursion, guards, and multi-branch returns.</p>
-        <RunnableSnippet id="types-extended" code={snippetTypesExtended} filename="math.spr" rows={22} />
+        <RunnableSnippet id="types-extended" code={snippetTypesExtended} filename="types.spr" rows={24} />
       </section>
 
       <section id="errors" class="scroll-mt-28 mb-16">
