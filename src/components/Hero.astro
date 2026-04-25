@@ -5,13 +5,13 @@ import sapphireGrammar from '../shiki/sapphire.tmLanguage.json';
 const helloCode = `class Greeter {
   attr name: String
 
-  def greet() -> String {
+  def greet -> String {
     "Hello, #{self.name}! Welcome to Sapphire."
   }
 }
 
 g = Greeter.new(name: "world")
-print g.greet()
+print g.greet
 
 # Blocks, iterators, type annotations — all built in
 squares = [1, 2, 3].map { |n| n * n }

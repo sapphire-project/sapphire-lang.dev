@@ -6,13 +6,13 @@ import Footer from '../components/Footer.astro';
 const defaultCode = `class Greeter {
   attr name: String
 
-  def greet() -> String {
+  def greet -> String {
     "Hello, \#{self.name}! Welcome to Sapphire."
   }
 }
 
 g = Greeter.new(name: "world")
-print g.greet()
+print g.greet
 
 squares = [1, 2, 3].map { |n| n * n }
 squares.each { |n| print n }`;

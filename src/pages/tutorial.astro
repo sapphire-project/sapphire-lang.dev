@@ -13,15 +13,15 @@ const snippetGreet = `def greet(who) {
 
 print greet("world")`;
 const snippetGreeter = `class Greeter {
-  attr who = "world"
+  attr who
 
-  def greet() {
+  def greet {
     print "Hello, #{self.who}!"
   }
 }
 
-g = Greeter.new()
-g.greet()`;
+g = Greeter.new(who: "world")
+g.greet`;
 const snippetValues = `n = 7
 pi = 3
 label = "answer"
@@ -31,12 +31,12 @@ squares = nums.map { |n| n * n }
 sum = nums.reduce(0) { |acc, n| acc + n }
 print "squares: #{squares}"
 print "sum: #{sum}"`;
-const snippetErrors = `def boom() {
+const snippetErrors = `def boom {
   raise "something went wrong"
 }
 
 begin
-  boom()
+  boom
 rescue e
   print "caught: #{e}"
 end`;
@@ -44,9 +44,9 @@ end`;
 const snippetInheritance = `class Shape {
   attr color = "red"
 
-  def area() { 0 }
+  def area { 0 }
 
-  def describe() {
+  def describe {
     "A #{self.color} shape"
   }
 }
@@ -55,18 +55,18 @@ class Rectangle < Shape {
   attr width: Int
   attr height: Int
 
-  def area() {
+  def area {
     self.width * self.height
   }
 
-  def describe() {
-    super.describe() + " (#{self.width}x#{self.height})"
+  def describe {
+    super.describe + " (#{self.width}x#{self.height})"
   }
 }
 
 r = Rectangle.new(width: 4, height: 5)
-print r.describe()   # A red shape (4x5)
-print r.area()       # 20
+print r.describe   # A red shape (4x5)
+print r.area       # 20
 print r.is_a?(Shape) # true`;
 const snippetTypesExtended = `def clamp(value: Int, min: Int, max: Int) -> Int {
   if value < min {
