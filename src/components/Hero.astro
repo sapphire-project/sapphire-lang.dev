@@ -37,23 +37,33 @@ const highlighted = hl.codeToHtml(helloCode, { lang: 'sapphire', theme: 'one-dar
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       <!-- Left: text -->
       <div>
-        <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300">
+        <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300">
           <span class="h-1.5 w-1.5 rounded-full bg-indigo-400"></span>
           v0.6.0 — Early preview
         </div>
 
-        <h1 class="text-5xl font-bold tracking-tight text-white lg:text-6xl leading-tight mb-6">
-          Object-oriented.<br />
+        <h1 class="text-7xl font-bold tracking-tight lg:text-8xl leading-none mb-5">
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">
-            Clean by design.
+            Sapphire
           </span>
         </h1>
 
-        <p class="text-lg text-slate-400 leading-relaxed mb-8 max-w-lg">
-          Sapphire is a Ruby-inspired programming language with gradual typing,
-          first-class blocks, and a clean object model. No magic. Just
-          elegant code.
+        <p class="text-xl text-slate-300 leading-relaxed mb-6 max-w-lg">
+          A language with Ruby's expressive syntax, gradual typing, and a clean
+          object model — without the magic.
         </p>
+
+        <div class="flex flex-wrap gap-2 mb-8">
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300">
+            Ruby-inspired syntax
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-medium text-violet-300">
+            Gradual typing
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-300">
+            Zero magic
+          </span>
+        </div>
 
         <div class="flex flex-wrap gap-3 mb-10">
           <a
