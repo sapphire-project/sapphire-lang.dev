@@ -31,16 +31,6 @@ squares = nums.map { |n| n * n }
 sum = nums.reduce(0) { |acc, n| acc + n }
 print "squares: #{squares}"
 print "sum: #{sum}"`;
-const snippetErrors = `def boom {
-  raise "something went wrong"
-}
-
-begin
-  boom
-rescue e
-  print "caught: #{e}"
-end`;
-
 const snippetInheritance = `class Shape {
   attr color = "red"
 
@@ -95,37 +85,12 @@ def factorial(n: Int) -> Int {
 }
 
 print factorial(6)  # 720`;
-const snippetErrorsExtended = `# raise / begin / rescue — clean and composable
-
-def parse_age(s: String) -> Int {
-  age = s.to_i
-  raise "age must be positive" if age <= 0
-  age
-}
-
-begin
-  print parse_age("25")  # 25
-  print parse_age("0")   # raises
-rescue e
-  print "bad input: #{e}"
-end
-
-# Inline rescue inside a function body
-def safe_divide(a: Int, b: Int) -> Int {
-  a / b
-rescue e
-  print "cannot divide by zero"
-  0
-}
-
-print safe_divide(10, 2)  # 5
-print safe_divide(10, 0)  # 0`;
 
 ---
 
 <Base
   title="Tutorial — Sapphire"
-  description="A short guided tour of Sapphire: syntax, classes, blocks, types, and errors — with runnable examples in your browser."
+  description="A short guided tour of Sapphire: syntax, classes, blocks, and types — with runnable examples in your browser."
 >
   <Nav />
   <main class="min-h-screen pt-24 pb-20 px-6">
@@ -150,7 +115,6 @@ print safe_divide(10, 0)  # 0`;
             <li><a href="#inheritance" class="hover:text-white">Inheritance</a></li>
             <li><a href="#blocks" class="hover:text-white">Blocks</a></li>
             <li><a href="#types" class="hover:text-white">Gradual typing</a></li>
-            <li><a href="#errors" class="hover:text-white">Errors</a></li>
             <li><a href="#next" class="hover:text-white">Next steps</a></li>
           </ul>
         </nav>
@@ -218,17 +182,6 @@ print safe_divide(10, 0)  # 0`;
           (recursion, guards, early return).
         </p>
         <RunnableSnippet id="types-extended" code={snippetTypesExtended} filename="types.spr" rows={24} />
-      </section>
-
-      <section id="errors" class="scroll-mt-28 mb-16">
-        <h2 class="text-xl font-semibold text-white mb-3">Errors</h2>
-        <p class="text-slate-400 leading-relaxed mb-4">
-          Raise with <code class="text-slate-300">raise</code>. Handle failures with <code class="text-slate-300">begin</code> /
-          <code class="text-slate-300">rescue</code>. You can also attach <code class="text-slate-300">rescue</code> to a method body for small scopes.
-        </p>
-        <RunnableSnippet id="errors" code={snippetErrors} filename="errors.spr" rows={10} />
-        <p class="text-slate-400 leading-relaxed mt-6 mb-4">Parsing with validation, <code class="text-slate-300">begin</code>/<code class="text-slate-300">rescue</code>, and inline <code class="text-slate-300">rescue</code> on a method.</p>
-        <RunnableSnippet id="errors-extended" code={snippetErrorsExtended} filename="errors-full.spr" rows={22} />
       </section>
 
       <section id="next" class="scroll-mt-28 mb-8">
