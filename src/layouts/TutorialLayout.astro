@@ -2,6 +2,7 @@
 import Base from './Base.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import '../styles/runnable-prism.css';
 
 interface Props {
   title?: string;
@@ -50,6 +51,28 @@ const {
 
   <script>
     import { getRunSapphire } from '../runtime/sapphire-wasm';
+    import Prism from 'prismjs';
+    import 'prismjs/components/prism-ruby';
+
+    function bindRubyHighlight(root: HTMLElement, editor: HTMLTextAreaElement) {
+      const codeEl = root.querySelector('[data-syntax-highlight]');
+      const preEl = codeEl?.parentElement;
+      if (!codeEl || !(codeEl instanceof HTMLElement) || !preEl) return;
+
+      const sync = () => {
+        codeEl.textContent = editor.value;
+        Prism.highlightElement(codeEl);
+      };
+
+      const syncScroll = () => {
+        preEl.scrollTop = editor.scrollTop;
+        preEl.scrollLeft = editor.scrollLeft;
+      };
+
+      sync();
+      editor.addEventListener('input', sync);
+      editor.addEventListener('scroll', syncScroll);
+    }
 
     function renderOutput(el: HTMLElement, text: string, isError: boolean) {
       el.innerHTML = '';
@@ -106,6 +129,8 @@ const {
         if (!editor || !runBtn || !outputEl || !runSapphire) return;
 
         runBtn.disabled = false;
+
+        bindRubyHighlight(root, editor);
 
         runBtn.addEventListener('click', async () => {
           setRunning(runBtn, true);

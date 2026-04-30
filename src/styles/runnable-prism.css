@@ -1,0 +1,18 @@
+@import 'prism-themes/themes/prism-one-dark.css';
+
+/* Match editor panel; allow wrap like the textarea */
+.runnable-snippet pre.language-ruby,
+.runnable-snippet pre.language-ruby code {
+  background: #0f0f17 !important;
+  color: rgb(203 213 225) !important;
+  text-shadow: none;
+  white-space: pre-wrap !important;
+  word-break: break-word;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace) !important;
+}
+
+.runnable-snippet pre.language-ruby {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}

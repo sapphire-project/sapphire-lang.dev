@@ -19,7 +19,12 @@
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.5",
+    "prism-themes": "^1.9.0",
+    "prismjs": "^1.30.0",
     "shiki": "^4.0.2",
     "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@types/prismjs": "^1.26.6"
   }
 }
