@@ -5,7 +5,7 @@
 import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import { pipeline } from 'stream/promises';
 
-const VERSION = 'v0.5.2';
+const VERSION = 'v0.7.0';
 const BASE = `https://github.com/sapphire-project/sapphire/releases/download/${VERSION}`;
 
 const FILES = [
