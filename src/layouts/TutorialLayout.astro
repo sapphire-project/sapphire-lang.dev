@@ -1,0 +1,143 @@
+---
+import Base from './Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Tutorial — Sapphire',
+  description = 'A short guided tour of Sapphire: syntax, classes, blocks, and types — with runnable examples in your browser.',
+} = Astro.props as Props;
+---
+
+<Base title={title} description={description}>
+  <Nav />
+  <main class="min-h-screen pt-24 pb-20 px-6">
+    <article class="tutorial-prose mx-auto max-w-3xl">
+      <header class="mb-10">
+        <h1 class="text-3xl font-bold text-white tracking-tight">Tutorial</h1>
+        <p class="mt-2 text-sm text-slate-500">
+          Browser runtime: <span id="wasm-status" class="text-slate-500">loading…</span>
+        </p>
+        <p class="mt-4 text-slate-400 leading-relaxed">
+          Sapphire is a small, Ruby-inspired language with objects, blocks, and optional type annotations.
+          This page walks through the basics; each runnable snippet uses the same WASM engine as the
+          <a href="/try" class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">playground</a>.
+        </p>
+        <nav aria-label="On this page" class="mt-8 rounded-lg border border-white/10 bg-white/[0.03] p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">On this page</p>
+          <ul class="text-sm text-slate-400 space-y-1.5 columns-1 sm:columns-2 gap-x-6">
+            <li><a href="#hello" class="hover:text-white">Hello</a></li>
+            <li><a href="#greet" class="hover:text-white">A greet method</a></li>
+            <li><a href="#greeter" class="hover:text-white">A Greeter class</a></li>
+            <li><a href="#values" class="hover:text-white">Values</a></li>
+            <li><a href="#inheritance" class="hover:text-white">Inheritance</a></li>
+            <li><a href="#blocks" class="hover:text-white">Blocks</a></li>
+            <li><a href="#types" class="hover:text-white">Gradual typing</a></li>
+            <li><a href="#next" class="hover:text-white">Next steps</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <slot />
+    </article>
+  </main>
+  <Footer />
+
+  <script>
+    import { getRunSapphire } from '../runtime/sapphire-wasm';
+
+    function renderOutput(el: HTMLElement, text: string, isError: boolean) {
+      el.innerHTML = '';
+      el.className =
+        'px-5 py-3 font-mono text-sm leading-relaxed bg-[#0a0a0f] min-h-[3.5rem] ' +
+        (isError ? 'text-red-400' : 'text-slate-200');
+      if (!text) {
+        const empty = document.createElement('span');
+        empty.className = 'text-slate-600 text-xs';
+        empty.textContent = '(no output)';
+        el.appendChild(empty);
+        return;
+      }
+      const pre = document.createElement('pre');
+      pre.className = isError
+        ? 'whitespace-pre-wrap break-words text-red-400'
+        : 'whitespace-pre-wrap break-words';
+      pre.textContent = text;
+      el.appendChild(pre);
+    }
+
+    function setRunning(btn: HTMLButtonElement, running: boolean) {
+      btn.disabled = running;
+      const icon = btn.querySelector('[data-run-icon]');
+      const spin = btn.querySelector('[data-run-spinner]');
+      icon?.classList.toggle('hidden', running);
+      spin?.classList.toggle('hidden', !running);
+    }
+
+    (async () => {
+      const wasmStatus = document.getElementById('wasm-status');
+      let runSapphire: Awaited<ReturnType<typeof getRunSapphire>> | null = null;
+      try {
+        runSapphire = await getRunSapphire();
+        if (wasmStatus) {
+          wasmStatus.textContent = 'ready';
+          wasmStatus.classList.remove('text-slate-500');
+          wasmStatus.classList.add('text-green-400/80');
+        }
+      } catch (e) {
+        if (wasmStatus) {
+          wasmStatus.textContent = 'failed to load runtime';
+          wasmStatus.classList.add('text-red-400');
+        }
+        console.error(e);
+        return;
+      }
+
+      document.querySelectorAll('[data-runnable-snippet]').forEach((rootEl) => {
+        const root = rootEl as HTMLElement;
+        const editor = root.querySelector('[data-editor]') as HTMLTextAreaElement | null;
+        const runBtn = root.querySelector('[data-run-btn]') as HTMLButtonElement | null;
+        const outputEl = root.querySelector('[data-output]') as HTMLElement | null;
+        if (!editor || !runBtn || !outputEl || !runSapphire) return;
+
+        runBtn.disabled = false;
+
+        runBtn.addEventListener('click', async () => {
+          setRunning(runBtn, true);
+          await new Promise((r) => setTimeout(r, 0));
+          try {
+            const result = runSapphire!(editor.value);
+            if (result.is_ok()) {
+              renderOutput(outputEl, result.output(), false);
+            } else {
+              renderOutput(outputEl, result.error() ?? 'Unknown error', true);
+            }
+          } catch (err) {
+            renderOutput(outputEl, String(err), true);
+          } finally {
+            setRunning(runBtn, false);
+          }
+        });
+
+        editor.addEventListener('keydown', (e) => {
+          if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+            e.preventDefault();
+            runBtn.click();
+          }
+          if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            editor.value = editor.value.slice(0, start) + '  ' + editor.value.slice(end);
+            editor.selectionStart = editor.selectionEnd = start + 2;
+          }
+        });
+      });
+    })();
+  </script>
+</Base>
