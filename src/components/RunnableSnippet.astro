@@ -51,15 +51,21 @@ const rowCount = Math.min(rows, Math.max(lineCount, 2));
       Run
     </button>
   </div>
-  <textarea
-    data-editor
-    spellcheck="false"
-    autocorrect="off"
-    autocapitalize="off"
-    rows={rowCount}
-    class="w-full resize-y bg-[#0f0f17] px-5 py-4 font-mono text-sm text-slate-200 outline-none leading-relaxed caret-indigo-400 border-b border-white/5 block"
-    set:text={code}
-  />
+  <div class="grid border-b border-white/5">
+    <pre
+      class="language-ruby col-start-1 row-start-1 m-0 min-h-0 min-w-0 overflow-auto px-5 py-4 text-sm leading-relaxed pointer-events-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      aria-hidden="true"
+    ><code class="language-ruby block min-h-full" data-syntax-highlight set:text={code}></code></pre>
+    <textarea
+      data-editor
+      spellcheck="false"
+      autocorrect="off"
+      autocapitalize="off"
+      rows={rowCount}
+      class="col-start-1 row-start-1 z-10 min-h-0 min-w-0 w-full resize-y overflow-auto bg-transparent px-5 py-4 font-mono text-sm text-transparent outline-none leading-relaxed caret-indigo-400 block"
+      set:text={code}
+    />
+  </div>
   <div
     data-output
     class="px-5 py-3 font-mono text-sm leading-relaxed bg-[#0a0a0f] min-h-[3.5rem] text-slate-600 text-xs"
