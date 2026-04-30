@@ -36,3 +36,33 @@ body {
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
 }
+
+/* Tutorial MDX body */
+.tutorial-prose a {
+  @apply text-indigo-400 underline underline-offset-2 hover:text-indigo-300;
+}
+
+.tutorial-prose h2 {
+  @apply mt-0 text-xl font-semibold text-white mb-3 scroll-mt-28;
+}
+
+.tutorial-prose p {
+  @apply text-slate-400 leading-relaxed mb-4;
+}
+
+.tutorial-prose p code,
+.tutorial-prose li code {
+  @apply text-slate-300;
+}
+
+.tutorial-prose ul {
+  @apply list-disc list-inside text-slate-400 space-y-2 leading-relaxed;
+}
+
+.tutorial-prose section {
+  @apply scroll-mt-28 mb-16;
+}
+
+.tutorial-prose section#next {
+  @apply mb-8;
+}
