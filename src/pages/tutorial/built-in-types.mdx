@@ -1,0 +1,48 @@
+---
+layout: ../../layouts/TutorialLayout.astro
+title: 'Built-in types — Sapphire Tutorial'
+description: 'Tour Sapphire built-in types, lists, maps, ranges, blocks, and collection methods.'
+pageTitle: 'Built-in types'
+pageDescription: 'Sapphire built-ins are regular objects: strings, numbers, booleans, lists, maps, ranges, and nil can be passed around and sent messages.'
+pageId: 'built-ins'
+---
+
+import RunnableSnippet from '../../components/RunnableSnippet.astro';
+import {
+  snippetBlocks,
+  snippetMaps,
+} from '../../content/tutorial-snippets';
+
+## Core values
+
+Sapphire includes the everyday value types you expect:
+
+| Type | Examples |
+| --- | --- |
+| `Int` | `0`, `42`, `-7` |
+| `Float` | `3.14`, `-0.5` |
+| `Bool` | `true`, `false` |
+| `String` | `"hello"` |
+| `List` | `[1, 2, 3]` |
+| `Map` | `{ name: "Ada", score: 95 }` |
+| `Nil` | `nil` |
+
+<section id="lists">
+
+## Lists and blocks
+
+Lists support familiar iterators: `map`, `each`, `reduce`, `select`, `any?`, `all?`, and friends. Blocks use `|x|` parameters.
+
+<RunnableSnippet id="blocks" code={snippetBlocks} filename="lists.spr" rows={10} />
+
+</section>
+
+<section id="maps">
+
+## Maps
+
+Map literals use `{ key: value }`; keys are strings, and maps support the same block style for filtering and iteration.
+
+<RunnableSnippet id="maps" code={snippetMaps} filename="maps.spr" rows={12} />
+
+</section>

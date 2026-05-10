@@ -1,0 +1,31 @@
+---
+layout: ../../layouts/TutorialLayout.astro
+title: 'Error handling — Sapphire Tutorial'
+description: 'Raise and rescue Sapphire errors with begin/rescue and method-level rescue.'
+pageTitle: 'Error handling'
+pageDescription: 'Use errors for exceptional paths, rescue them around a block, or put a rescue clause directly inside a method body.'
+pageId: 'error-handling'
+---
+
+import RunnableSnippet from '../../components/RunnableSnippet.astro';
+import { snippetErrors } from '../../content/tutorial-snippets';
+
+<section id="rescue">
+
+## Errors and rescue
+
+Raise errors with `raise`. Use `begin` / `rescue`, or place a `rescue` clause directly inside a method body when the whole method has one fallback path.
+
+<RunnableSnippet id="errors" code={snippetErrors} filename="errors.spr" rows={10} />
+
+</section>
+
+<section id="next">
+
+## Next steps
+
+- Open the [playground](/try) for a blank editor and the full keyboard shortcuts.
+- Follow [Install](/#install) on the home page to run Sapphire locally.
+- Browse the [GitHub repository](https://github.com/sapphire-project/sapphire) for the compiler, stdlib, and issues.
+
+</section>

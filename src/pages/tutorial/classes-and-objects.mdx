@@ -1,0 +1,60 @@
+---
+layout: ../../layouts/TutorialLayout.astro
+title: 'Classes and objects — Sapphire Tutorial'
+description: 'Learn Sapphire classes, inheritance, private methods, class methods, mixins, abstract classes, and imports.'
+pageTitle: 'Classes and objects'
+pageDescription: 'Sapphire classes use attributes for state, methods for behavior, inheritance for specialization, and modules or abstract classes when you want stronger structure.'
+pageId: 'classes'
+---
+
+import RunnableSnippet from '../../components/RunnableSnippet.astro';
+import {
+  snippetInheritance,
+  snippetMethods,
+  snippetAbstractClasses,
+} from '../../content/tutorial-snippets';
+
+<section id="inheritance">
+
+## Inheritance
+
+Subclasses use `< Parent`. Call overridden methods with Ruby-style `super()` or bare `super` to forward the same arguments.
+
+<RunnableSnippet id="inheritance" code={snippetInheritance} filename="shapes.spr" rows={18} />
+
+</section>
+
+<section id="methods">
+
+## Private and class methods
+
+Use `defp` for helpers that should only be called inside the class. A `self { ... }` block defines methods on the class itself, which is handy for factories.
+
+<RunnableSnippet id="methods" code={snippetMethods} filename="account.spr" rows={22} />
+
+</section>
+
+<section id="abstract-classes">
+
+## Abstract classes
+
+Use `abstract class` and `abstract def` when subclasses must share a base type and implement specific behavior before they can be instantiated.
+
+<RunnableSnippet id="abstract-classes" code={snippetAbstractClasses} filename="abstract.spr" rows={18} />
+
+</section>
+
+<section id="imports">
+
+## Imports and local projects
+
+The browser runner executes one file at a time, but local Sapphire programs can split code across files with relative imports:
+
+```sapphire
+import "./geometry/point"
+import "../shared/helpers"
+```
+
+Top-level classes and functions from imported files become available to the importing file.
+
+</section>

@@ -7,12 +7,31 @@ import '../styles/runnable-prism.css';
 interface Props {
   title?: string;
   description?: string;
+  pageTitle?: string;
+  pageDescription?: string;
+  pageId?: string;
 }
 
 const {
   title = 'Tutorial — Sapphire',
-  description = 'A short guided tour of Sapphire: syntax, classes, blocks, and types — with runnable examples in your browser.',
+  description = 'A guided tour of Sapphire syntax, classes, blocks, types, pattern matching, interfaces, and error handling.',
+  pageTitle = 'Tutorial',
+  pageDescription = 'Sapphire is a small, Ruby-inspired language with objects, blocks, and optional type annotations.',
+  pageId = 'basics',
 } = Astro.props as Props;
+
+const tutorialPages = [
+  { id: 'basics', title: 'Basics', href: '/tutorial/' },
+  { id: 'classes', title: 'Classes and objects', href: '/tutorial/classes-and-objects/' },
+  { id: 'built-ins', title: 'Built-in types', href: '/tutorial/built-in-types/' },
+  { id: 'control-flow', title: 'Control flow', href: '/tutorial/control-flow/' },
+  { id: 'gradual-typing', title: 'Gradual typing', href: '/tutorial/gradual-typing/' },
+  { id: 'error-handling', title: 'Error handling', href: '/tutorial/error-handling/' },
+];
+
+const currentIndex = Math.max(0, tutorialPages.findIndex((page) => page.id === pageId));
+const previousPage = currentIndex > 0 ? tutorialPages[currentIndex - 1] : null;
+const nextPage = currentIndex < tutorialPages.length - 1 ? tutorialPages[currentIndex + 1] : null;
 ---
 
 <Base title={title} description={description}>
@@ -20,31 +39,61 @@ const {
   <main class="min-h-screen pt-24 pb-20 px-6">
     <article class="tutorial-prose mx-auto max-w-3xl">
       <header class="mb-10">
-        <h1 class="text-3xl font-bold text-white tracking-tight">Tutorial</h1>
+        <h1 class="text-3xl font-bold text-white tracking-tight">{pageTitle}</h1>
         <p class="mt-2 text-sm text-slate-500">
           Browser runtime: <span id="wasm-status" class="text-slate-500">loading…</span>
         </p>
         <p class="mt-4 text-slate-400 leading-relaxed">
-          Sapphire is a small, Ruby-inspired language with objects, blocks, and optional type annotations.
-          This page walks through the basics; each runnable snippet uses the same WASM engine as the
+          {pageDescription} Each runnable snippet uses the same WASM engine as the
           <a href="/try" class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">playground</a>.
         </p>
-        <nav aria-label="On this page" class="mt-8 rounded-lg border border-white/10 bg-white/[0.03] p-4">
-          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">On this page</p>
-          <ul class="text-sm text-slate-400 space-y-1.5 columns-1 sm:columns-2 gap-x-6">
-            <li><a href="#hello" class="hover:text-white">Hello</a></li>
-            <li><a href="#greet" class="hover:text-white">A greet method</a></li>
-            <li><a href="#greeter" class="hover:text-white">A Greeter class</a></li>
-            <li><a href="#values" class="hover:text-white">Values</a></li>
-            <li><a href="#inheritance" class="hover:text-white">Inheritance</a></li>
-            <li><a href="#blocks" class="hover:text-white">Blocks</a></li>
-            <li><a href="#types" class="hover:text-white">Gradual typing</a></li>
-            <li><a href="#next" class="hover:text-white">Next steps</a></li>
+        <nav aria-label="Tutorial sections" class="mt-8 rounded-lg border border-white/10 bg-white/[0.03] p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">Tutorial sections</p>
+          <ul class="grid gap-2 text-sm sm:grid-cols-2">
+            {tutorialPages.map((page) => (
+              <li>
+                <a
+                  href={page.href}
+                  aria-current={page.id === pageId ? 'page' : undefined}
+                  class:list={[
+                    'block rounded-md px-3 py-2 transition-colors',
+                    page.id === pageId
+                      ? 'bg-indigo-500/15 text-indigo-200 ring-1 ring-indigo-400/25'
+                      : 'text-slate-400 hover:bg-white/5 hover:text-white',
+                  ]}
+                >
+                  {page.title}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
       </header>
 
       <slot />
+
+      <nav aria-label="Tutorial page navigation" class="not-prose mt-14 grid gap-3 border-t border-white/10 pt-8 sm:grid-cols-2">
+        {previousPage ? (
+          <a
+            href={previousPage.href}
+            class="rounded-lg border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-400 transition-colors hover:border-indigo-400/30 hover:bg-indigo-500/10 hover:text-white"
+          >
+            <span class="block text-xs uppercase tracking-wide text-slate-500">Previous</span>
+            {previousPage.title}
+          </a>
+        ) : (
+          <span></span>
+        )}
+        {nextPage && (
+          <a
+            href={nextPage.href}
+            class="rounded-lg border border-white/10 bg-white/[0.03] p-4 text-right text-sm text-slate-400 transition-colors hover:border-indigo-400/30 hover:bg-indigo-500/10 hover:text-white"
+          >
+            <span class="block text-xs uppercase tracking-wide text-slate-500">Next</span>
+            {nextPage.title}
+          </a>
+        )}
+      </nav>
     </article>
   </main>
   <Footer />

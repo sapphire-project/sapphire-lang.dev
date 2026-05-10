@@ -1,0 +1,34 @@
+---
+layout: ../../layouts/TutorialLayout.astro
+title: 'Gradual typing — Sapphire Tutorial'
+description: 'Add optional Sapphire type annotations, return types, interfaces, modules, and mixins.'
+pageTitle: 'Gradual typing'
+pageDescription: 'Add annotations where they help, lean on inference elsewhere, and use structural interfaces when you want typed boundaries without explicit implementation declarations.'
+pageId: 'gradual-typing'
+---
+
+import RunnableSnippet from '../../components/RunnableSnippet.astro';
+import {
+  snippetTypesExtended,
+  snippetInterfacesMixins,
+} from '../../content/tutorial-snippets';
+
+<section id="annotations">
+
+## Type annotations
+
+Sapphire is gradually typed: you can add `name: Type` and `-> Type` where they help, and lean on inference elsewhere. The type checker enforces the annotations you choose; untyped code still runs.
+
+<RunnableSnippet id="types-extended" code={snippetTypesExtended} filename="types.spr" rows={24} />
+
+</section>
+
+<section id="interfaces-mixins">
+
+## Interfaces and mixins
+
+Interfaces are structural: a value satisfies an interface by implementing the required methods, without an explicit declaration. Modules package reusable methods and `include(...)` mixes them into a class.
+
+<RunnableSnippet id="interfaces-mixins" code={snippetInterfacesMixins} filename="interfaces.spr" rows={20} />
+
+</section>
