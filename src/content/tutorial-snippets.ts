@@ -12,7 +12,7 @@ export const snippetGreeter = `class Greeter {
   attr who
 
   def greet() {
-    print "Hello, #{who}!"
+    print "Hello, #{self.who}!"
   }
 }
 
@@ -61,7 +61,7 @@ export const snippetInheritance = `class Shape {
   def area() { 0 }
 
   def describe() {
-    "A #{color} shape"
+    "A #{self.color} shape"
   }
 }
 
@@ -70,11 +70,11 @@ class Rectangle < Shape {
   attr height: Int
 
   def area() {
-    width * height
+    self.width * self.height
   }
 
   def describe() {
-    super() + " (#{width}x#{height})"
+    super() + " (#{self.width}x#{self.height})"
   }
 }
 
@@ -93,7 +93,7 @@ export const snippetMethods = `class BankAccount {
   }
 
   def deposit(amount: Int) {
-    self.balance = balance + validate(amount)
+    self.balance = self.balance + validate(amount)
   }
 
   defp validate(amount: Int) -> Int {
@@ -176,7 +176,7 @@ class Square < Shape {
   attr side: Float
 
   def area() -> Float {
-    side * side
+    self.side * self.side
   }
 }
 

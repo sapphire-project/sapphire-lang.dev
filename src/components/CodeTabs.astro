@@ -11,7 +11,7 @@ const tabs = [
   def area() { 0 }
 
   def describe() {
-    "A #{color} shape"
+    "A #{self.color} shape"
   }
 }
 
@@ -20,11 +20,11 @@ class Rectangle < Shape {
   attr height: Int
 
   def area() {
-    width * height
+    self.width * self.height
   }
 
   def describe() {
-    super() + " (#{width}x#{height})"
+    super() + " (#{self.width}x#{self.height})"
   }
 }
 
