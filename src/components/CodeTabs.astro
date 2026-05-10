@@ -8,10 +8,10 @@ const tabs = [
     code: `class Shape {
   attr color = "red"
 
-  def area { 0 }
+  def area() { 0 }
 
-  def describe {
-    "A #{self.color} shape"
+  def describe() {
+    "A #{color} shape"
   }
 }
 
@@ -19,18 +19,18 @@ class Rectangle < Shape {
   attr width: Int
   attr height: Int
 
-  def area {
-    self.width * self.height
+  def area() {
+    width * height
   }
 
-  def describe {
-    super.describe + " (#{self.width}x#{self.height})"
+  def describe() {
+    super() + " (#{width}x#{height})"
   }
 }
 
 r = Rectangle.new(width: 4, height: 5)
-print r.describe   # A red shape (4x5)
-print r.area       # 20
+print r.describe()   # A red shape (4x5)
+print r.area()       # 20
 print r.is_a?(Shape) # true`,
   },
   {
