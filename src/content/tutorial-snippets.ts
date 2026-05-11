@@ -11,13 +11,13 @@ print greet("world")`;
 export const snippetGreeter = `class Greeter {
   attr who
 
-  def greet() {
+  def greet {
     print "Hello, #{self.who}!"
   }
 }
 
 g = Greeter.new(who: "world")
-g.greet()`;
+g.greet`;
 
 export const snippetValues = `n = 7
 pi = 3
@@ -58,9 +58,9 @@ print "students: #{scores.keys}"`;
 export const snippetInheritance = `class Shape {
   attr color = "red"
 
-  def area() { 0 }
+  def area { 0 }
 
-  def describe() {
+  def describe {
     "A #{self.color} shape"
   }
 }
@@ -69,25 +69,25 @@ class Rectangle < Shape {
   attr width: Int
   attr height: Int
 
-  def area() {
+  def area {
     self.width * self.height
   }
 
-  def describe() {
-    super() + " (#{self.width}x#{self.height})"
+  def describe {
+    super + " (#{self.width}x#{self.height})"
   }
 }
 
 r = Rectangle.new(width: 4, height: 5)
-print r.describe()   # A red shape (4x5)
-print r.area()       # 20
+print r.describe   # A red shape (4x5)
+print r.area       # 20
 print r.is_a?(Shape) # true`;
 
 export const snippetMethods = `class BankAccount {
   attr balance: Int = 0
 
   self {
-    def open() {
+    def open {
       self.new(balance: 0)
     }
   }
@@ -102,7 +102,7 @@ export const snippetMethods = `class BankAccount {
   }
 }
 
-account = BankAccount.open()
+account = BankAccount.open
 account.deposit(100)
 print account.balance`;
 
@@ -159,25 +159,25 @@ class Person {
 }
 
 def welcome(person: Greeter) -> String {
-  person.greet() + "!"
+  person.greet + "!"
 }
 
-print welcome(Person.new())`;
+print welcome(Person.new)`;
 
 export const snippetAbstractClasses = `abstract class Shape {
-  abstract def area() -> Float
+  abstract def area -> Float
 
-  def describe() -> String {
-    "area=#{self.area()}"
+  def describe -> String {
+    "area=#{self.area}"
   }
 }
 
 class Square < Shape {
   attr side: Float
 
-  def area() -> Float {
+  def area -> Float {
     self.side * self.side
   }
 }
 
-print Square.new(side: 4.0).describe()`;
+print Square.new(side: 4.0).describe`;
