@@ -35,7 +35,7 @@
     },
     "keyword": {
       "name": "keyword.control.sapphire",
-      "match": "\\b(def|defp|class|if|elsif|else|while|for|in|return|raise|begin|rescue|else|end|yield|next|break|attr|super|do)\\b"
+      "match": "\\b(def|defp|class|abstract|interface|module|include|match|if|elsif|else|while|for|in|return|raise|begin|rescue|else|end|yield|next|break|attr|super|do)\\b"
     },
     "constant": {
       "name": "constant.language.sapphire",

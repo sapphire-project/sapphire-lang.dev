@@ -1,0 +1,33 @@
+---
+layout: ../../layouts/TutorialLayout.astro
+title: 'Control flow — Sapphire Tutorial'
+description: 'Use Sapphire if, while, trailing guards, ranges, and match expressions.'
+pageTitle: 'Control flow'
+pageDescription: 'Sapphire keeps branching and iteration compact with block syntax, trailing guards, ranges, and v0.8.0 match expressions.'
+pageId: 'control-flow'
+---
+
+import RunnableSnippet from '../../components/RunnableSnippet.astro';
+import { snippetControlFlow } from '../../content/tutorial-snippets';
+
+<section id="if-while">
+
+## `if`, `while`, and guards
+
+Use `if` / `elsif` / `else` for branching and `while` for loops. A trailing `if` is useful for single-line guards:
+
+```sapphire
+print "passing" if score >= 60
+```
+
+</section>
+
+<section id="ranges-match">
+
+## Ranges and `match`
+
+Inclusive ranges use `from..to`. Sapphire v0.8.0 also adds `match`, with literal and range patterns plus `_` as the wildcard arm.
+
+<RunnableSnippet id="control-flow" code={snippetControlFlow} filename="control_flow.spr" rows={15} />
+
+</section>

@@ -59,6 +59,22 @@ body {
   @apply list-disc list-inside text-slate-400 space-y-2 leading-relaxed;
 }
 
+.tutorial-prose .tutorial-nav ul {
+  @apply m-0 grid list-none gap-2 p-0 text-sm leading-normal text-inherit sm:grid-cols-2;
+}
+
+.tutorial-prose .tutorial-nav li {
+  @apply m-0 list-none p-0;
+}
+
+.tutorial-prose .tutorial-nav a {
+  @apply no-underline;
+}
+
+.tutorial-prose .tutorial-nav p {
+  @apply mb-3 leading-normal;
+}
+
 .tutorial-prose section {
   @apply scroll-mt-28 mb-16;
 }

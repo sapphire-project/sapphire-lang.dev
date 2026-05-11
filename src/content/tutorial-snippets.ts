@@ -24,11 +24,36 @@ pi = 3
 label = "answer"
 print "#{label}: #{n + pi}"`;
 
+export const snippetControlFlow = `score = 87
+
+grade = match score {
+  90..100 => { "A" }
+  80..89 => { "B" }
+  70..79 => { "C" }
+  _ => { "keep going" }
+}
+
+print "grade: #{grade}"
+
+(1..5).each { |n|
+  print "even: #{n}" if n % 2 == 0
+}`;
+
 export const snippetBlocks = `nums = [1, 2, 3, 4]
 squares = nums.map { |n| n * n }
 sum = nums.reduce(0) { |acc, n| acc + n }
 print "squares: #{squares}"
 print "sum: #{sum}"`;
+
+export const snippetMaps = `scores = { ada: 95, matz: 88, grace: 91 }
+scores["sandy"] = 84
+
+honors = scores.select { |name, score| score >= 90 }
+honors.each { |name, score|
+  print "#{name}: #{score}"
+}
+
+print "students: #{scores.keys}"`;
 
 export const snippetInheritance = `class Shape {
   attr color = "red"
@@ -49,7 +74,7 @@ class Rectangle < Shape {
   }
 
   def describe {
-    super.describe + " (#{self.width}x#{self.height})"
+    super + " (#{self.width}x#{self.height})"
   }
 }
 
@@ -57,6 +82,39 @@ r = Rectangle.new(width: 4, height: 5)
 print r.describe   # A red shape (4x5)
 print r.area       # 20
 print r.is_a?(Shape) # true`;
+
+export const snippetMethods = `class BankAccount {
+  attr balance: Int = 0
+
+  self {
+    def open {
+      self.new(balance: 0)
+    }
+  }
+
+  def deposit(amount: Int) {
+    self.balance = self.balance + validate(amount)
+  }
+
+  defp validate(amount: Int) -> Int {
+    raise "amount must be positive" if amount <= 0
+    amount
+  }
+}
+
+account = BankAccount.open
+account.deposit(100)
+print account.balance`;
+
+export const snippetErrors = `def safe_divide(a: Int, b: Int) -> Int {
+  a / b
+rescue e
+  print "cannot divide: #{e}"
+  0
+}
+
+print safe_divide(10, 2)
+print safe_divide(10, 0)`;
 
 export const snippetTypesExtended = `def clamp(value: Int, min: Int, max: Int) -> Int {
   if value < min {
@@ -85,3 +143,41 @@ def factorial(n: Int) -> Int {
 }
 
 print factorial(6)  # 720`;
+
+export const snippetInterfacesMixins = `interface Greeter {
+  def greet -> String
+}
+
+module Friendly {
+  def greet -> String {
+    "hello from a mixin"
+  }
+}
+
+class Person {
+  include(Friendly)
+}
+
+def welcome(person: Greeter) -> String {
+  person.greet + "!"
+}
+
+print welcome(Person.new)`;
+
+export const snippetAbstractClasses = `abstract class Shape {
+  abstract def area -> Float
+
+  def describe -> String {
+    "area=#{self.area}"
+  }
+}
+
+class Square < Shape {
+  attr side: Float
+
+  def area -> Float {
+    self.side * self.side
+  }
+}
+
+print Square.new(side: 4.0).describe`;
