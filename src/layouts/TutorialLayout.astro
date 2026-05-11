@@ -47,7 +47,7 @@ const nextPage = currentIndex < tutorialPages.length - 1 ? tutorialPages[current
           {pageDescription} Each runnable snippet uses the same WASM engine as the
           <a href="/try" class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">playground</a>.
         </p>
-        <nav aria-label="Tutorial sections" class="mt-8 rounded-lg border border-white/10 bg-white/[0.03] p-4">
+        <nav aria-label="Tutorial sections" class="tutorial-nav mt-8 rounded-lg border border-white/10 bg-white/[0.03] p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">Tutorial sections</p>
           <ul class="grid gap-2 text-sm sm:grid-cols-2">
             {tutorialPages.map((page) => (
@@ -72,7 +72,7 @@ const nextPage = currentIndex < tutorialPages.length - 1 ? tutorialPages[current
 
       <slot />
 
-      <nav aria-label="Tutorial page navigation" class="not-prose mt-14 grid gap-3 border-t border-white/10 pt-8 sm:grid-cols-2">
+      <nav aria-label="Tutorial page navigation" class="tutorial-nav mt-14 grid gap-3 border-t border-white/10 pt-8 sm:grid-cols-2">
         {previousPage ? (
           <a
             href={previousPage.href}
