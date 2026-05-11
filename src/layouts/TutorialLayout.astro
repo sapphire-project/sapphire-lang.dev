@@ -12,13 +12,15 @@ interface Props {
   pageId?: string;
 }
 
+const layoutProps = Astro.props as Props & { frontmatter?: Props };
+
 const {
   title = 'Tutorial — Sapphire',
   description = 'A guided tour of Sapphire syntax, classes, blocks, types, pattern matching, interfaces, and error handling.',
   pageTitle = 'Tutorial',
   pageDescription = 'Sapphire is a small, Ruby-inspired language with objects, blocks, and optional type annotations.',
   pageId = 'basics',
-} = Astro.props as Props;
+} = { ...layoutProps.frontmatter, ...layoutProps };
 
 const tutorialPages = [
   { id: 'basics', title: 'Basics', href: '/tutorial/' },
